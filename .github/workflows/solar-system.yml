@@ -34,5 +34,5 @@ jobs:
           - name: save test results artifacts
             uses: actions/upload-artifact@v4
             with:
-                name: results-${{ matrix.os }}
+                name: results-${{ matrix.os }}-${{ matrix.node-js-versions }}
                 path: test-results.xml
