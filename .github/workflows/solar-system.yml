@@ -73,3 +73,17 @@ jobs:
             with:
                 name: coverage_results-${{ matrix.os }}-${{ matrix.node-js-versions }}
                 path: coverage
+    docker:
+        name: containerization
+        needs: [unit-testing, coverage-testing]
+        runs-on: ubuntu-latest
+        steps:
+          - name: checkout-repo
+            uses: actions/checkout@v4
+          - name: Docker login
+            uses: docker/login-action@v4
+            with:
+                username: ${{ vars.DOCKERHUB_USERNAME }}
+                password: ${{ secrets.DOCKERHUB_TOKEN }}
+           
+
