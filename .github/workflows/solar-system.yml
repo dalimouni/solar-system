@@ -104,6 +104,6 @@ jobs:
               echo $IP
 
               echo testing image url using wget
-              wget -q -O - 127.0.0.1/live | grep live
+              wget -q -O - $IP:3000/live | grep live
 
 
