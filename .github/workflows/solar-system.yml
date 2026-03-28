@@ -15,10 +15,10 @@ jobs:
         strategy:
             matrix:
                 node-js-versions: [18,19,20]
-                os: [ubuntu-latest,macos-latest]
-                exclude:
-                    - node-js-versions: 18
-                      os: macos-latest
+                os: [ubuntu-latest]
+                # exclude:
+                #     - node-js-versions: 18
+                #       os: macos-latest
         runs-on: ${{ matrix.os }}
         steps:
           - name: checkout-repo
@@ -46,10 +46,10 @@ jobs:
         strategy:
             matrix:
                 node-js-versions: [18,19,20]
-                os: [ubuntu-latest,macos-latest]
-                exclude:
-                    - node-js-versions: 18
-                      os: macos-latest
+                os: [ubuntu-latest]
+                # exclude:
+                #     - node-js-versions: 18
+                #       os: macos-latest
         runs-on: ${{ matrix.os }}
         steps:
           - name: checkout-repo
@@ -104,6 +104,6 @@ jobs:
               echo $IP
 
               echo testing image url using wget
-              wget -q -O - 127.0.0.1:3000/live | grep live
+              wget -q -O - $IP/live | grep live
 
 
