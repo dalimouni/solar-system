@@ -158,6 +158,7 @@ jobs:
               REPLICAS: "2"
               K8S_IMAGE: docker.io/${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{github.sha}}
             run: |
+              cat kubernetes/development/*.yaml | envsubst
               cat kubernetes/development/*.yaml | envsubst | kubectl apply -f -
           - name: Wait for rollout
             run: |
