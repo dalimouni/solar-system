@@ -147,6 +147,19 @@ jobs:
           - name: Verify cluster access
             run: |
               kubectl get nodes
+          - name: Create namespace
+            run: |
+              kubectl create namespace solar-system \
+              --dry-run=client -o yaml | kubectl apply -f -
+          
+          - name: Deploy to GKE
+            env:
+              NAMESPACE: solar-system
+              REPLICAS: "2"
+              K8S_IMAGE: docker.io/${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{github.sha}}
+            run: |
+              envsubst < kubernetes/development/*.yaml | kubectl apply -f -
+
 
 
 
