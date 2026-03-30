@@ -136,7 +136,7 @@ jobs:
             uses: helm/kind-action@v1
 
           - name: Create cluster
-            run: kind create cluster --name nodejs_app
+            run: kind create cluster --name nodejs-app
           
           - name: run kubectl version command
             run: |
