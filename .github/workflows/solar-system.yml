@@ -158,7 +158,7 @@ jobs:
               REPLICAS: "2"
               K8S_IMAGE: docker.io/${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{github.sha}}
             run: |
-              envsubst < kubernetes/development/*.yaml | kubectl apply -f -
+              envsubst < <(cat kubernetes/development/*.yaml) | kubectl apply -
 
 
 
