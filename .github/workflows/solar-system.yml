@@ -121,6 +121,30 @@ jobs:
               tags: |
                 ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{github.sha}}
                 ghcr.io/${{ github.repository_owner }}/solar-system:${{github.sha}}
+    kind_deploy:
+        name: deployment in kind
+        needs: docker
+        runs-on: ubuntu-latest
+        steps:
+          - name: checkout-repo
+            uses: actions/checkout@v4
+          
+          - name: Install kubectl
+            uses: azure/setup-kubectl@v4
+
+          - name: Install kind
+            uses: helm/kind-action@v1
+
+          - name: Create cluster
+            run: kind create cluster --name nodejs_app
+          
+          - name: run kubectl version command
+            run: |
+                kubectl version --short
+                echo --------
+                kubectl get nodes
+
+
 
 
 
