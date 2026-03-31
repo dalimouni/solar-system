@@ -104,7 +104,7 @@ jobs:
               docker images
               docker run --name solar-system-app -d \
                 -p 3000:3000 \
-                -e MONGO_URI= ${{ secrets.MONGO_URI }} \
+                -e MONGO_URI=$MONGO_URI \
                 -e MONGO_USERNAME=$MONGO_USERNAME \
                 -e MONGO_PASSWORD=$MONGO_PASSWORD \
                 ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{github.sha}}
@@ -150,12 +150,11 @@ jobs:
           - name: Create namespace
             run: |
               kubectl create namespace solar-system \
-              --dry-run=client -o yaml | kubectl apply -f -
-
+              --dry-run=client -o yaml | kubectl apply -f -        
           - name: Create MongoDB secret
             run: |
               kubectl create secret generic mongo-db-creds \
-                --from-literal=MONGO_URI= ${{ secrets.MONGO_URI }} \
+                --from-literal=MONGO_URI="${{ secrets.MONGO_URI }}" \
                 -n solar-system \
                 --dry-run=client -o yaml | kubectl apply -f -
          
