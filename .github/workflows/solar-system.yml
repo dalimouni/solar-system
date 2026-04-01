@@ -197,7 +197,7 @@ jobs:
             run: |
               echo $Ingress_IP
               echo ----------------
-              curl http://$Ingress_IP/live -s -k | jq -r .status | grep -i live
+              curl http://$Ingress_IP/live -s -k | grep -i live
 
 
 
