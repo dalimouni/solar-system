@@ -187,14 +187,17 @@ jobs:
         needs: connect_to_GKE_and_Deploy
         env:
           Ingress_IP: ${{ needs.connect_to_GKE_and_Deploy.outputs.App_Ingress_IP }}
+
         steps:
           - name: Checkout
             uses: actions/checkout@v4
+          - name: Install jq
+            run: sudo apt-get update && sudo apt-get install -y jq
           - name: Test the ingress 
             run: |
               echo $Ingress_IP
               echo ----------------
-              curl https://$Ingress_IP/live -s -k | jq -r .status | grep -i live
+              curl http://$Ingress_IP/live -s -k | jq -r .status | grep -i live
 
 
 
