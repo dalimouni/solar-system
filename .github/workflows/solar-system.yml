@@ -125,7 +125,7 @@ jobs:
         runs-on: ubuntu-latest
         environment:
           name: development
-          url: https://${{ steps.ingress.outputs.APP_INGRESS_HOST }}
+          url: https://solar-system-solar-system.${{ steps.ingress.outputs.APP_INGRESS_HOST }}.nip.io
         needs: docker
         permissions:
           contents: read
@@ -172,7 +172,7 @@ jobs:
               NAMESPACE: solar-system
               REPLICAS: "2"
               K8S_IMAGE: docker.io/${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{github.sha}}
-              INGRESS_IP: "34.123.45.78"
+              INGRESS_IP: $(kubectl -n solar-system get ingress solar-system -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
             run: |
               cat kubernetes/development/*.yaml | envsubst
               cat kubernetes/development/*.yaml | envsubst | kubectl apply -f -
