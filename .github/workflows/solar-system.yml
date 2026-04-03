@@ -177,7 +177,7 @@ jobs:
               NAMESPACE: solar-system
               REPLICAS: "2"
               K8S_IMAGE: docker.io/${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{github.sha}}
-              INGRESS_IP: ${{ env.APP_INGRESS_HOST }}
+              INGRESS_IP: ${{ steps.ingress.outputs.APP_INGRESS_HOST }}
             run: |
               cat kubernetes/development/*.yaml | envsubst
               cat kubernetes/development/*.yaml | envsubst | kubectl apply -f -
