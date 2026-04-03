@@ -203,7 +203,7 @@ jobs:
               echo $Ingress_IP
               echo ----------------
               # kubectl get ingress -n solar-system
-              curl https://solar-system-${{ env.NAMESPACE }}.${{ env.Ingress_IP }}/live -s -k | grep -i live
+              curl https://solar-system-${{ env.NAMESPACE }}.${{ env.Ingress_IP }}.nip.io/live -s -k | grep -i live
 
 
 
