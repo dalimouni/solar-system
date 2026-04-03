@@ -201,7 +201,7 @@ jobs:
               echo $Ingress_IP
               echo ----------------
                 kubectl get ingress -n solar-system
-              curl http://$Ingress_IP/live -s -k | grep -i live
+              curl https://$Ingress_IP/live -s -k | grep -i live
 
 
 
