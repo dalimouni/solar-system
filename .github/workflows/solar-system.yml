@@ -184,7 +184,7 @@ jobs:
           - name: save ingress IP 
             id: ingress 
             run: |
-              echo "APP_INGRESS_HOST=$(kubectl -n solar-system get ingress -o jsonpath="{.items[0].spec.tls[0].hosts[0]}")" >> $GITHUB_OUTPUT
+              echo "APP_INGRESS_HOST=$(kubectl -n solar-system get ingress -o jsonpath="{.items[0].spec.tls[0].address[0]}")" >> $GITHUB_OUTPUT
     Integration_test:
         runs-on: ubuntu-latest
         needs: connect_to_GKE_and_Deploy
@@ -200,6 +200,7 @@ jobs:
             run: |
               echo $Ingress_IP
               echo ----------------
+                kubectl get ingress -n solar-system
               curl http://$Ingress_IP/live -s -k | grep -i live
 
 
