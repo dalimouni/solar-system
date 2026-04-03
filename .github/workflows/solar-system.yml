@@ -174,7 +174,7 @@ jobs:
 
           - name: Deploy to GKE
             env:
-              NAMESPACE: solar-system
+              NAMESPACE: "-"
               REPLICAS: "2"
               K8S_IMAGE: docker.io/${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{github.sha}}
               INGRESS_IP: ${{ env.APP_INGRESS_HOST }}
