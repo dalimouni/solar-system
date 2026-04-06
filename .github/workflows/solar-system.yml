@@ -238,12 +238,12 @@ jobs:
               kubectl get nodes
           - name: Create namespace
             run: |
-              kubectl create namespace solar-system \
+              kubectl create namespace prod-solar-system \
               --dry-run=client -o yaml | kubectl apply -f -        
           
           - name: Create MongoDB secret
             run: |
-              kubectl -n solar-system create secret generic mongo-db-creds \
+              kubectl -n prod-solar-system create secret generic mongo-db-creds \
                 --from-literal=MONGO_URI="${{ env.MONGO_URI }}" \
                 --from-literal=MONGO_USERNAME="${{ vars.MONGO_USERNAME }}" \
                 --from-literal=MONGO_PASSWORD="${{ secrets.MONGO_PASSWORD }}" \
@@ -254,28 +254,28 @@ jobs:
           - name: save ingress IP 
             id: ingress 
             run: |
-              echo "APP_INGRESS_HOST=$(kubectl get ingress solar-system -n solar-system -o jsonpath='{.status.loadBalancer.ingress[0].ip}{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_OUTPUT        
+              echo "APP_INGRESS_HOST=$(kubectl get ingress solar-system -n prod-solar-system -o jsonpath='{.status.loadBalancer.ingress[0].ip}{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_OUTPUT        
 
           - name: Deploy to GKE
             env:
-              NAMESPACE: solar-system
+              NAMESPACE: prod-solar-system
               REPLICAS: "5"
               K8S_IMAGE: docker.io/${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{github.sha}}
               INGRESS_IP: ${{ steps.ingress.outputs.APP_INGRESS_HOST }}
             run: |
-              cat kubernetes/production/*.yaml | envsubst
-              cat kubernetes/production/*.yaml | envsubst | kubectl apply -f -
+              cat kubernetes/staging/*.yaml | envsubst
+              cat kubernetes/staging/*.yaml | envsubst | kubectl apply -f -
           - name: Wait for rollout
             run: |
               kubectl rollout status deployment/solar-system \
-              -n solar-system \
+              -n prod-solar-system \
               --timeout=120s
     Prod_Integration_test:
         runs-on: ubuntu-latest
         needs: connect_to_GKE_and_Prod_Deploy
         env:
           Ingress_IP: ${{ needs.connect_to_GKE_and_Prod_Deploy.outputs.App_Ingress_IP }}
-          NAMESPACE: solar-system
+          NAMESPACE: prod-solar-system
 
         steps:
           - name: Checkout
@@ -286,7 +286,7 @@ jobs:
             run: |
               echo $Ingress_IP
               echo ----------------
-              # kubectl get ingress -n solar-system
+              # kubectl get ingress -n prod-solar-system
               curl https://solar-system-${{ env.NAMESPACE }}.${{ env.Ingress_IP }}.nip.io/live -s -k | grep -i live
 
 
