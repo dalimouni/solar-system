@@ -1,10 +1,11 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app: solar-system
   name: solar-system
-  namespace: ${NAMESPACE}
+  namespace: "${NAMESPACE}"
 spec:
   replicas: ${REPLICAS}
   selector:
@@ -17,7 +18,7 @@ spec:
         app: solar-system
     spec:
       containers:
-      - image: ${K8S_IMAGE}
+      - image: "${K8S_IMAGE}"
         imagePullPolicy: Always
         name: solar-system
         ports:
