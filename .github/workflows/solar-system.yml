@@ -209,13 +209,13 @@ jobs:
         runs-on: ubuntu-latest
         environment:
           name: production
-          url: https://solar-system.${{ steps.ingress.outputs.APP_INGRESS_PROD_HOST }}.nip.io
+          url: https://solar-system.${{ steps.prod_ingress.outputs.APP_INGRESS_PROD_HOST }}.nip.io
         needs: docker
         permissions:
           contents: read
           id-token: write 
         outputs: 
-          App_Ingress_Prod_IP: ${{ steps.ingress.outputs.APP_INGRESS_PROD_HOST }}
+          App_Ingress_Prod_IP: ${{ steps.prod_ingress.outputs.APP_INGRESS_PROD_HOST }}
         steps:
           - name: Checkout
             uses: actions/checkout@v4
@@ -252,7 +252,7 @@ jobs:
                 -o yaml | kubectl apply -f -
 
           - name: save ingress IP 
-            id: ingress 
+            id: prod_ingress 
             run: |
               echo "APP_INGRESS_PROD_HOST=$(kubectl get ingress solar-system -n prod-solar-system -o jsonpath='{.status.loadBalancer.ingress[0].ip}{.status.loadBalancer.ingress[0].hostname}')" >> $GITHUB_OUTPUT        
 
@@ -261,7 +261,7 @@ jobs:
               NAMESPACE: prod-solar-system
               REPLICAS: "5"
               K8S_IMAGE: docker.io/${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{github.sha}}
-              INGRESS_IP: ${{ steps.ingress.outputs.APP_INGRESS_PROD_HOST }}
+              INGRESS_IP: ${{ steps.prod_ingress.outputs.APP_INGRESS_PROD_HOST }}
             run: |
               cat kubernetes/staging/*.yaml | envsubst
               cat kubernetes/staging/*.yaml | envsubst | kubectl apply -f -
