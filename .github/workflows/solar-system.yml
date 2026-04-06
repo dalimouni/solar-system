@@ -209,7 +209,7 @@ jobs:
         runs-on: ubuntu-latest
         environment:
           name: production
-          url: https://solar-system.${{ steps.ingress.outputs.APP_INGRESS_HOST }}.nip.io
+          url: https://solar-system.${{ steps.ingress.outputs.APP_INGRESS_PROD_HOST }}.nip.io
         needs: docker
         permissions:
           contents: read
